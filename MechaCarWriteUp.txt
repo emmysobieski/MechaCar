@@ -1,0 +1,133 @@
+LINEAR REGRESSION
+
+Using multiple linear regression, design a linear model that predicts the mpg of MechaCar prototypes using a number of variables within the MechaCar mpg dataset
+
+First, I read in the CSV and ran a linear regression on all the variables (naming it model1)
+
+MechaCar <- read.csv('MechaCar_mpg.csv') #import MechaCar dataset
+model1=lm(mpg ~ vehicle.length + vehicle.weight + spoiler.angle + ground.clearance + AWD,data=MechaCar) #generate multiple linear regression model
+
+RESULTS:
+
+Coefficients:
+     (Intercept)    vehicle.length    vehicle.weight     spoiler.angle  
+      -1.040e+02         6.267e+00         1.245e-03         6.877e-02  
+ground.clearance               AWD  
+       3.546e+00        -3.411e+00  
+
+Then I ran summary statistics on the model1 
+summary(model 1)
+
+RESULTS:
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-19.4701  -4.4994  -0.0692   5.4433  18.5849 
+
+Coefficients:
+                   Estimate Std. Error t value Pr(>|t|)    
+(Intercept)      -1.040e+02  1.585e+01  -6.559 5.08e-08 ***
+vehicle.length    6.267e+00  6.553e-01   9.563 2.60e-12 ***
+vehicle.weight    1.245e-03  6.890e-04   1.807   0.0776 .  
+spoiler.angle     6.877e-02  6.653e-02   1.034   0.3069    
+ground.clearance  3.546e+00  5.412e-01   6.551 5.21e-08 ***
+AWD              -3.411e+00  2.535e+00  -1.346   0.1852    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 8.774 on 44 degrees of freedom
+Multiple R-squared:  0.7149,	Adjusted R-squared:  0.6825 
+F-statistic: 22.07 on 5 and 44 DF,  p-value: 5.35e-11
+
+
+THEN I RAN A NEW REGRESSION ON JUST THE SIGNIFICANT VARIABLES TO COMPARE WITH THE ORIGINAL REGRESSION
+summary(lm(mpg ~ vehicle.length + vehicle.weight + ground.clearance,data=MechaCar)) #generate summary statistics of multiple linear regression
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-21.1845  -6.0392   0.1843   7.0213  17.6710 
+
+
+Coefficients:
+                   Estimate Std. Error t value Pr(>|t|)    
+(Intercept)      -1.000e+02  1.455e+01  -6.874 1.41e-08 ***
+vehicle.length    6.196e+00  6.632e-01   9.343 3.37e-12 ***
+vehicle.weight    1.190e-03  6.946e-04   1.714   0.0933 .  
+ground.clearance  3.522e+00  5.299e-01   6.647 3.09e-08 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 8.897 on 46 degrees of freedom
+Multiple R-squared:  0.6936,	Adjusted R-squared:  0.6736 
+F-statistic:  34.7 on 3 and 46 DF,  p-value: 7.089e-12
+
+
+Which variables/coefficients provided a non-random amount of variance to the mpg values in the dataset?
+
+The variables that provided a non-random amount of variance to the mpg values in the dataset are the Vehicle Length, Vehicle Weight, and Ground Clearance.  The vehicle weight had a lower impact on mpg than drive train or spoiler angle, which both had higher t scores.  To further test the assumption that these are the meaningful variables, I ran a multiple regression analysis on just those variables, improving the F-statistic from 22.07 to 34.7 while barely reducing the adjusted R-Squared from 0.6825 to 0.6736:
+
+Is the slope of the linear model considered to be zero? Why or why not?
+
+The slope of the linear model is NOT considered to be zero because there are multiple variables (Vehicle Weight, Spoiler Angle, and Drive Train) that explain mpg to a statistically significant level.  If no variable in the regression explained mpg, then the slope would be zero.  R being zero would mean there is no slope, but in this case Adjusted R-squared of 0.6825 means there is a fit, and non-zero coefficients to the variables show there is a slope.
+
+Does this linear model predict mpg of MechaCar prototypes effectively? Why or why not?
+
+This linear model does appear to predict the mpg of MechaCar fairly effectively, with an adjusted R-squared of 0.6825 and a F statistic of 22.07.  As I was able to show, by removing non-relevant variables, you can improve the F statistic and focus on those variables that matter most, so there is room to improve the model more.  The remaining issue is that the intercept is statistically significant and the residual value has a high standard error in both models (the one that includes all variables and the second that has just the more significant variables).  This tells us that there are other variables not captured here that might help explain mpg even better.  However, this is a pretty good model at 0.6825 adjusted R-squared.
+
+
+SUSPENSION COIL SUMMARY STATISTICS
+
+The design specifications for the MechaCar suspension coils dictate that the variance of the suspension coils must not exceed 100 pounds per inch. Does the current manufacturing data meet this design specification? Why or why not?
+No, the current manufacturing does not entirely meet the design specification.  The first two lots have a mean and median of 1,500 which shows no skewness and good reliability.  Their variance and standard deviation is low at below 8 for a number of 1,500, and wanting to not have a variance exceeding 100.  However, the 3rd lot has a variance of 170, so it will not meet specifications.  Lot 1 looks the most reliable, then lot 2.  Lot 3 does not meet design specifications. All three have fairly close mean and median, meaning that they have data that is likely normally distributed.  The issue with lot 3 is that the variability of PSI is just too high, so you don’t know if the suspension performance will be reliable from one part to the next.
+
+
+SUSPENSION COIL T-TEST
+
+Determine if the suspension coil’s pound-per-inch results are statistically different from the mean population results of 1,500 pounds per inch.
+
+Ho: The suspension coil’s pound-per-inch results are NOT statistically different from the mean population results of 1,500 pounds per inch.
+Ha: The suspension coil’s pound-per-inch results ARE statistically different from the mean population results of 1,500 pounds per inch.
+
+As you can see from the One Sample t-test, when we take a sample of suspensions and compare it to the mean of the overall population of suspensions, the Null Hypothesis holds, given the p-value of 0.06028 which is greater than 0.05.  The sample of the PSI is not statistically different from the mean.  This is positive because it reflects that all 3 lots of suspension coils are within similar specs.
+
+Keep in mind, not rejecting the null hypothesis relies on where we set the confidence interval.  If we set it to be .05 and its 0.06028, then we do not reject the null hypothesis and Ho is fine, so we can say means of the population and of our sample are the same.
+
+One Sample t-test
+
+data:  SuspensionCoil$PSI
+t = -1.8931, df = 149, p-value = 0.06028
+alternative hypothesis: true mean is not equal to 1500
+95 percent confidence interval:
+ 1497.507 1500.053
+sample estimates:
+mean of x 
+  1498.78
+
+
+STUDY DESIGN: MECHA CAR VS OTHER MODELS
+
+Create a study that compares the performance of the MechaCar prototype vehicle to other comparable vehicles on the market.  Describe a statistical study that can quantify how the MechaCar outperforms the competition.
+
+(1) First, from my research, focusing on safety and cost because of the weak economy and fear of Covid and protests, features that appear to be important to consumer are in several buckets:
+a. Safety (Automatic brake, Line departure sensor, Rear Camera, Blind Spot sensor, crash safety)
+b. Cost (Purchase Price, maintenance cost, fuel cost (mpg))
+c. Performance (Variables include: acceleration 0-60, turning radius, braking)
+
+(2) Then take all those features and run multiple variable regression analysis on price (Y=PRICE) to determine which features customers are willing to pay for. 
+a. The null hypothesis Ho is that customers are unwilling to pay for any features
+b. The alternative hypothesis Ha is that customers are willing to pay for features
+   Thus, the features which are statistically significant would be those customers are willing to pay for.
+   
+(3) Then run another multiple variable regression analysis with the significant variables and see if it increases the Adjusted R-Squared, further determining if we have all the variables important to consumers.
+
+(4) Once we have determined the most important features, determined by significance, keep that model.
+
+(5) The independent variable is PRICE (as mentioned above).
+
+(6) Run MechaCar features through the model and if the predicted PRICE is higher than the sales price of MechaCar, then by buying MechaCar, customers are getting more value (features they will pay for) for the price they pay vs other cars in a comparable price range.
+
+(7) DATA COLLECTION: to determine what data should be collected, first determine MechaCar’s price range, then observe cars in that same price range.  Collect data on those cars, with the variables to include: 
+a. Safety (Automatic brake, Line departure sensor, Rear Camera, Blind Spot sensor, crash safety)
+b. Cost (Purchase Price, maintenance cost, fuel cost (mpg))
+c. Performance (Variables include: acceleration 0-60, turning radius, braking)
+***Importantly, if none of the cars in MechaCar’s price range have one or more of the above features, then that data would not be relevant in a comparison for this price range and should not be collected or used in the analysis.

@@ -1,0 +1,9 @@
+library(tidyverse) #load tidyverse library
+.Internal(setwd("C:/Users/esobieski/Documents/R"))
+MechaCar <- read.csv('MechaCar_mpg.csv') #import MechaCar dataset
+model1=lm(mpg ~ vehicle.length + vehicle.weight + spoiler.angle + ground.clearance + AWD,data=MechaCar) #generate multiple linear regression model
+summary(model1)
+summary(lm(mpg ~ vehicle.length + vehicle.weight + ground.clearance,data=MechaCar)) #generate summary statistics of multiple linear regression of data from statistically significant variables
+SuspensionCoil <- read.csv('Suspension_Coil.csv') #import Suspension_Coil dataset
+PSI_summary_stats2 <- SuspensionCoil %>% group_by(Manufacturing_Lot) %>% summarize(Mean_PSI=mean(PSI), Median_PSI=median(PSI), Variance_PSI=var(PSI), StdDev_PSI=sd(PSI)) #create summary stats table
+t.test(SuspensionCoil$PSI,mu=1500) #compare sample versus overall PSI means 
